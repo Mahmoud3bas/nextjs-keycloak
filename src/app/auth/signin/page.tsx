@@ -1,7 +1,6 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Login from "@/components/Login";
-import { getServerSession } from "next-auth";
-import { redirect, useParams } from "next/navigation";
+import { redirect } from "next/navigation";
+import { auth } from "../../../../auth";
 
 const signinErrors: Record<string | "default", string> = {
   default: "Unable to sign in.",
@@ -25,10 +24,11 @@ interface SignInPageProp {
 }
 
 export default async function Signin({ searchParams: { callbackUrl, error } }: SignInPageProp) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (session) {
     redirect(callbackUrl || "/")
   }
+  console.log(error)
   return (
     <div className='flex flex-col space-y-3 justify-center items-center h-screen'>
       {error && <div>

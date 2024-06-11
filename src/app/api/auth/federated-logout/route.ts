@@ -26,7 +26,9 @@ function sendEndSessionEndpointToURL(token: JWT) {
 
 export async function GET(req: NextRequest) {
   try {
-    const token = await getToken({ req })
+    // only ignore because the type requrires a salt but the implmentation does not need it
+    // @ts-ignore 
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
     if (token) {
       return sendEndSessionEndpointToURL(token);
     }
